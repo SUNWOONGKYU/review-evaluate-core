@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1180" viewBox="0 0 1820 1180" role="img" aria-labelledby="t d">
+  <title id="t">review-evaluate 관계도 (v0.6 · 2026-09-16 현행화)</title>
+  <desc id="d">사용자와 메인 세션, 타입별 리뷰어 3종과 교차검증자, 외부 추가 자문(codex·Gemini·웹 폴백)과 평가 대상 산출물의 관계. 누가 고치고 누가 채점하는지가 분리되어 있다.</desc>
+  <style>
+    .bg{fill:#fafaf7}
+    .panel{fill:#ffffff;stroke:#dce5de;stroke-width:2}
+    .panelHead{fill:#eaf2ed;stroke:#dce5de;stroke-width:2}
+    .card{fill:#ffffff;stroke:#5f6b7a;stroke-width:2}
+    .cardGreen{fill:#eaf2ed;stroke:#2d6a4f;stroke-width:3}
+    .cardGold{fill:#fff8e7;stroke:#c9a961;stroke-width:3}
+    .cardDark{fill:#0a1f14}
+    .title{font:700 38px 'Malgun Gothic',Arial,sans-serif;fill:#0a1f14}
+    .sub{font:20px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .colHead{font:700 25px 'Malgun Gothic',Arial,sans-serif;fill:#2d6a4f}
+    .cardHead{font:700 21px 'Malgun Gothic',Arial,sans-serif;fill:#0a1f14}
+    .body{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#3a3a30}
+    .bodyLight{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#fafaf7}
+    .note{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .flow{stroke:#2d6a4f;stroke-width:3;fill:none;marker-end:url(#a)}
+    .flowGold{stroke:#c9a961;stroke-width:3;fill:none;marker-end:url(#ag)}
+    .flowGray{stroke:#5f6b7a;stroke-width:2;fill:none;stroke-dasharray:9 7;marker-end:url(#agr)}
+    .edgeLabel{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a;paint-order:stroke;stroke:#fafaf7;stroke-width:11;stroke-linejoin:round}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2d6a4f"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a961"/></marker>
+    <marker id="agr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6b7a"/></marker>
+  </defs>
+  <rect class="bg" width="1820" height="1180"/>
+
+  <text class="title" x="60" y="70">review-evaluate — 관계도</text>
+  <text class="sub" x="60" y="104">검토하는 사람·고치는 사람·채점하는 사람을 분리한다 — 리뷰어는 의견만, 작성자가 수정, 100점은 Claude 교차검증자가 준다</text>
+
+  <!-- 왼쪽: 사람·지휘 -->
+  <rect class="panel" x="60" y="140" width="410" height="810" rx="10"/>
+  <rect class="panelHead" x="60" y="140" width="410" height="52" rx="10"/>
+  <text class="colHead" x="86" y="176">사람 · 지휘</text>
+
+  <rect class="cardGreen" x="86" y="220" width="364" height="120" rx="8"/>
+  <text class="cardHead" x="114" y="254">사용자 (지휘관)</text>
+  <text class="body" x="114" y="288">/review-evaluate [파일·폴더] 호출</text>
+  <text class="body" x="114" y="316">100점 뒤 "추가/완료"만 결정</text>
+
+  <rect class="cardGreen" x="86" y="366" width="364" height="180" rx="8"/>
+  <text class="cardHead" x="114" y="400">메인 세션 (Claude)</text>
+  <text class="body" x="114" y="434">대상 결정 · 파일 타입 분류</text>
+  <text class="body" x="114" y="462">연관 문서 탐색 → 사양-구현 대조</text>
+  <text class="body" x="114" y="490">리뷰어·검증자 소환 · 라운드 판단</text>
+  <text class="note" x="114" y="524">결함 목록 전달 · 직접 채점 안 함</text>
+
+  <rect class="cardGold" x="86" y="572" width="364" height="150" rx="8"/>
+  <text class="cardHead" x="110" y="606">작성자 — 수정 (v0.7)</text>
+  <text class="body" x="110" y="640">산출물을 만든 세션이 직접 고친다</text>
+  <text class="body" x="110" y="668">회신: 반영 / 거부+이유 / 보류</text>
+  <text class="note" x="110" y="702">없으면 메인 세션이 작성자 대리</text>
+
+  <rect class="card" x="86" y="748" width="364" height="178" rx="8"/>
+  <text class="cardHead" x="110" y="782">평가 대상 산출물</text>
+  <text class="body" x="110" y="816">Code — .py .ts .tsx .js .sql</text>
+  <text class="body" x="110" y="844">Document — .md</text>
+  <text class="body" x="110" y="872">Report — .html</text>
+  <text class="note" x="110" y="906">+ 연관 사양 문서 (CLAUDE.md 등)</text>
+
+  <!-- 가운데: 리뷰·검증 서브에이전트 -->
+  <rect class="panel" x="600" y="140" width="500" height="960" rx="10"/>
+  <rect class="panelHead" x="600" y="140" width="500" height="52" rx="10"/>
+  <text class="colHead" x="626" y="176">서브에이전트 (Claude · Sonnet)</text>
+
+  <rect class="cardGold" x="630" y="220" width="440" height="230" rx="8"/>
+  <text class="cardHead" x="654" y="254">리뷰어 3종 — 검토 · 의견만 (read-only)</text>
+  <text class="body" x="654" y="288">Code Reviewer — 문법·보안·품질·테스트</text>
+  <text class="body" x="654" y="316">Document Reviewer — 사실·용어·구조·규칙</text>
+  <text class="body" x="654" y="344">Report Reviewer — 데이터·렌더·명칭·접근성</text>
+  <text class="note" x="654" y="378">결함 목록: 파일:줄 근거 + 수정 제안</text>
+  <text class="note" x="654" y="406">작성자 회신을 대조해 반영 확인</text>
+  <text class="note" x="654" y="434">수정하지 않는다 · 채점하지 않는다</text>
+
+  <rect class="cardGreen" x="630" y="476" width="440" height="200" rx="8"/>
+  <text class="cardHead" x="654" y="510">Cross Validator — 독립 채점</text>
+  <text class="body" x="654" y="544">검토·수정 어느 쪽에도 안 낀 제3자</text>
+  <text class="body" x="654" y="572">6기준 루브릭 (15×5 + 사양 25 = 100)</text>
+  <text class="body" x="654" y="600">파일별 점수 → 균등 평균 = 통합 점수</text>
+  <text class="note" x="654" y="634">CV = 100 이 곧 "100점 달성"</text>
+  <text class="note" x="654" y="662">95·97·99에서 임의 종료 금지</text>
+
+  <rect class="card" x="630" y="702" width="440" height="176" rx="8"/>
+  <text class="cardHead" x="654" y="736">루브릭 6기준 (타입별)</text>
+  <text class="body" x="654" y="770">Code: 문법·보안·품질·테스트·완성도 + 사양</text>
+  <text class="body" x="654" y="798">Doc: 사실·용어·구조·규칙·실용 + 사양</text>
+  <text class="body" x="654" y="826">Report: 데이터·렌더·명칭·균일·접근 + 사양</text>
+  <text class="note" x="654" y="860">사양 충족률 25점 — GAP 1건당 −5</text>
+
+  <rect class="card" x="630" y="904" width="440" height="170" rx="8"/>
+  <text class="cardHead" x="654" y="938">순환 루프 상태</text>
+  <text class="body" x="654" y="972">Round 1 → 최소 3회 · 최대 10회</text>
+  <text class="body" x="654" y="1000">반영 0건 2회 연속 → 자동 종료</text>
+  <text class="body" x="654" y="1028">라운드별 반영·거부·이월 이력</text>
+  <text class="note" x="654" y="1058">종료 사유: 100점 / 10회 / 개선 불가</text>
+
+  <!-- 오른쪽: 외부 자문 -->
+  <rect class="panel" x="1290" y="140" width="470" height="960" rx="10"/>
+  <rect class="panelHead" x="1290" y="140" width="470" height="52" rx="10"/>
+  <text class="colHead" x="1316" y="176">외부 추가 자문 (CV=100 뒤에만)</text>
+
+  <rect class="cardGold" x="1320" y="220" width="410" height="150" rx="8"/>
+  <text class="cardHead" x="1344" y="254">codex (OpenAI · 구독 CLI)</text>
+  <text class="body" x="1344" y="288">플러그인 wrapper → 구식 exec 폴백</text>
+  <text class="body" x="1344" y="316">read-only · 루프당 1회</text>
+  <text class="note" x="1344" y="350">인코딩 3종 UTF-8 강제 (mojibake 방지)</text>
+
+  <rect class="cardGold" x="1320" y="396" width="410" height="150" rx="8"/>
+  <text class="cardHead" x="1344" y="430">Gemini (gemini.cjs · REST)</text>
+  <text class="body" x="1344" y="464">키 로테이션 · pro→flash 폴백</text>
+  <text class="body" x="1344" y="492">루프당 1회</text>
+  <text class="note" x="1344" y="526">CLI·API 막히면 웹 구독 세션 폴백</text>
+
+  <rect class="card" x="1320" y="572" width="410" height="150" rx="8"/>
+  <text class="cardHead" x="1344" y="606">웹 구독 폴백 (최후 수단)</text>
+  <text class="body" x="1344" y="640">chatgpt.com · gemini.google.com</text>
+  <text class="body" x="1344" y="668">자동화 Chrome(CDP 9222) 로그인 세션</text>
+  <text class="note" x="1344" y="702">= 브라우저 자동화(CDP)와 같은 원리</text>
+
+  <rect class="cardDark" x="1320" y="748" width="410" height="200" rx="8"/>
+  <text class="cardHead" x="1344" y="782" style="fill:#fafaf7">자문 처리 규칙 (v0.6·v0.7)</text>
+  <text class="bodyLight" x="1344" y="818">C·H만 작성자가 반영 → CV 재확인</text>
+  <text class="bodyLight" x="1344" y="846">점수·Medium·Low·도메인 판단 = 참고</text>
+  <text class="bodyLight" x="1344" y="874">거짓 결함은 py_compile로 반증·기각</text>
+  <text class="bodyLight" x="1344" y="902">미실시여도 CV=100 유효 (표기)</text>
+  <text class="bodyLight" x="1344" y="930">외부 점수 추격 금지</text>
+
+  <text class="note" x="1320" y="1000">CV &lt; 100 이면 외부를 부르지 않는다.</text>
+  <text class="note" x="1320" y="1028">100을 만든 뒤에만, 각 1회.</text>
+  <text class="note" x="1320" y="1068">QC 4종 중 가장 가벼운 도구.</text>
+  <text class="note" x="1320" y="1096">무거운 순: pro-persona-debate → 주작</text>
+
+  <!-- 화살표 -->
+  <path class="flow" d="M 268 340 L 268 364"/>
+  <path class="flow" d="M 268 546 L 268 570"/>
+  <path class="flow" d="M 450 456 L 500 456 L 500 300 L 628 300"/>
+  <text class="edgeLabel" x="506" y="392">소환</text>
+  <path class="flowGold" d="M 630 400 L 540 400 L 540 640 L 452 640"/>
+  <text class="edgeLabel" x="552" y="530">결함 목록</text>
+  <path class="flow" d="M 450 680 L 590 680 L 590 560 L 628 560"/>
+  <text class="edgeLabel" x="455" y="704">수정 회신·수정본</text>
+  <path class="flow" d="M 1070 520 L 1180 520 L 1180 128 L 268 128 L 268 218"/>
+  <text class="edgeLabel" x="900" y="135">라운드 결과 보고</text>
+    <path class="flow" d="M 850 450 L 850 474"/>
+  <text class="edgeLabel" x="872" y="468">반영 확인 결과</text>
+  <path class="flowGray" d="M 850 676 L 850 700"/>
+  <text class="edgeLabel" x="872" y="694">루브릭 적용</text>
+  <path class="flowGray" d="M 850 878 L 850 902"/>
+  <text class="edgeLabel" x="872" y="896">점수·판단</text>
+  <path class="flowGold" d="M 1070 590 L 1200 590 L 1200 300 L 1318 300"/>
+  <text class="edgeLabel" x="1206" y="553">CV=100 → 각 1회</text>
+  <path class="flowGold" d="M 1200 470 L 1318 470"/>
+  <path class="flowGray" d="M 1525 546 L 1525 570"/>
+  <text class="edgeLabel" x="1540" y="564">막히면</text>
+  <path class="flow" d="M 1525 722 L 1525 746"/>
+  <text class="edgeLabel" x="1540" y="740">의견 합집합</text>
+  <path class="flow" d="M 1318 850 L 1160 850 L 1160 620 L 1072 620"/>
+  <text class="edgeLabel" x="1170" y="760">C/H만 반영</text>
+
+  <text class="note" x="60" y="1140">2026-09-16 현행화 · SKILL.md v0.7(2026-09-16) 기준 · 리뷰어 3(의견) + 작성자(수정) + 교차검증자 1(채점) + 외부 자문 2 · 루프 3~10회 · 100점 = CV(Claude)</text>
+</svg>

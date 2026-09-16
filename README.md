@@ -1,6 +1,6 @@
-# /review-evaluate — 검토 및 5기준 평가 (100점 품질 스코어)
+# /review-evaluate — 검토·수정·교차검증 100점 품질 루프
 
-콘텐츠를 **검토(Review)**하여 문제점을 파악하고, **평가(Evaluate)**하여 품질 점수를 부여하는 종합 시스템.
+콘텐츠를 **검토(Review)**하여 문제점을 찾고, **작성자가 수정(Fix)**한 뒤, **교차검증자가 채점(Evaluate)**하는 3역할 분리 루프. 100점에 도달할 때까지 최소 3회·최대 10회 순환한다.
 
 ## Install
 
@@ -8,29 +8,68 @@
 npx skills add SUNWOONGKYU/review-evaluate-core
 ```
 
-## 2단계 프로세스
+## 역할 3분리 (v0.7)
 
-### 1단계: 검토 (Review)
-- 문제점 및 개선사항 식별
-- 구체적 수정 제안 제공
-- 심각도 분류 (Critical / High / Medium / Low)
+리뷰어가 직접 고치면 맥락을 모른 채 엉뚱하게 수정하는 일이 잦았다. 그래서 검토·수정·채점을 서로 다른 역할로 나눈다.
 
-### 2단계: 평가 (Evaluate)
-5가지 기준으로 품질 점수 산정 (각 20점 만점, 총 100점):
+| 역할 | 할 일 | 하지 않는 일 |
+|---|---|---|
+| **리뷰어** (Code/Document/Report 타입별) | 결함을 찾아 Critical/High/Medium/Low로 분류하고 파일:줄 근거 + 수정 제안을 낸다 | 직접 수정 (read-only) |
+| **작성자** (그 산출물을 만든 세션, 없으면 메인 세션이 대리) | 결함 목록을 받아 수정하고, 반영/거부(+이유)/보류로 회신한다 | 자기 작업을 자기가 채점 |
+| **Cross Validator** | 검토·수정 어느 쪽에도 참여하지 않은 채 루브릭 기준으로 독립 채점한다 | 결함을 직접 고치거나 리뷰하지 않음 |
 
-| 기준 | 설명 |
-|------|------|
-| 기술적 정확성 | Information correctness and currency |
-| 가독성 | Ease of reading and understanding |
-| 구조 및 구성 | Logical flow and systematic arrangement |
-| 완성도 | Comprehensive coverage of the topic |
-| 유용성 | Practical applicability and real-world value |
+## 라운드 흐름
+
+```
+검토(리뷰어, 의견만) → 수정(작성자, 반영/거부+이유/보류) → 반영 확인(리뷰어) → 채점(Cross Validator)
+```
+
+- 반영 건수 0건이면 점수를 유지하고, 연속 2회 반영 0건이면 자동 종료한다.
+- **100점 = Cross Validator(Claude) 단계에서 달성한다.** Cross Validator가 100점을 준 시점에만 codex·Gemini(웹 구독 폴백 포함)를 각 1회 추가 자문으로 호출해 사각 지대를 점검한다 — 100점을 무르는 게이트가 아니라, Critical/High 결함만 추가로 반영하는 보조 검증이다.
+- 최대 10회, 또는 연속 반영 0건 2회 시 강제 종료한다.
+
+## 루브릭 6기준 (Code/Document/Report 공통 구조, 각 100점)
+
+내부 품질 5기준 × 15점 + 사양 충족률 25점 = 100점. 파일 타입별 세부 항목:
+
+| 타입 | 내부 품질 5기준 (15점씩) | 사양 충족률 (25점) |
+|---|---|---|
+| **Code** (.py/.ts/.js/.sql) | 문법·실행 · 보안 · 코드 품질 · 테스트·검증 · 기능 완성도 | 연관 문서 대비 구현 일치율 |
+| **Document** (.md) | 사실 정확성 · 용어 일관성 · 구조 완성도 · 규칙 준수 · 실용성 | 연관 문서/코드와 내용 일치율 |
+| **Report** (.html) | 데이터 정확성 · 렌더링 품질 · 정식명칭·금지문구 · 구조 균일성 · 접근성 | 연관 문서/스크립트와 출력 일치율 |
+
+사양 충족률이 전체의 25%를 차지하므로, 내부 품질이 만점이어도 연관 문서와 동떨어지면 75점이 상한이다. 연관 문서를 찾지 못하면 "대조 미실시" 표기 후 기본값 15점을 적용한다.
+
+## 도해
+
+- [관계도](skills/review-evaluate-core/docs/관계도.svg) — 사용자·메인 세션·리뷰어·작성자·Cross Validator·외부 자문의 관계
+- [작업 흐름도](skills/review-evaluate-core/docs/흐름도.svg) — 준비(Phase 1·1.5) → 라운드(Phase 2) → 확정(Phase 3) 10단계 흐름
 
 ## 사용법
 
 ```
-/review-evaluate <파일경로 또는 디렉토리>
+/review-evaluate [파일경로 또는 디렉토리]
+
+# 예시
+/review-evaluate scripts/generate_report.py   # 단일 파일
+/review-evaluate ./scripts/                    # 디렉토리 전체
+/review-evaluate                               # 직전 작업 파일 자동 탐지
 ```
+
+## 함께 쓰면 좋은 스킬 (설치돼 있다면, 없으면 이 스킬 단독으로 충분)
+
+- `/5times-debug-loop` — 빌드 실패·API 5xx·렌더 깨짐 등 재현 가능한 버그는 수정 라운드를 소모하지 말고 여기로 위임
+- `/pro-persona-debate`, `/주작-sal-da` — review-evaluate보다 무거운 평가가 필요할 때(다관점 토론, 실측 기반 다차원 감사)
+
+## 버전 이력
+
+| 버전 | 날짜 | 요지 |
+|---|---|---|
+| v0.2 | 2026-05-28 | 외부 LLM(codex) 교차검증 도입 — 같은 LLM 가족 안에서 발생하는 자기 검증 편향을 막기 위해 외부 점수 ≥95점 게이트 신설 |
+| v0.4 | 2026-06-11 | Cross Validator가 100점에 도달하기 전에는 외부 LLM을 호출하지 않도록 순서 고정 (조기 호출 금지) |
+| v0.5 | 2026-06-12 | 외부 LLM 호출 시 한글 mojibake로 인한 거짓 0점 판정을 막기 위해 인코딩 3종 강제 + codex·Gemini 이중 교차검증 도입 |
+| v0.6 | 2026-06 | 100점 기준을 Cross Validator(Claude) 달성으로 명문화, 외부 LLM은 "추가 자문"으로 역할 재정의(점수·Medium·Low·도메인 전문 판단은 참고 의견), CLI·API 모두 막히면 웹 구독 세션으로 폴백 |
+| v0.7 | 2026-09-16 | 역할 3분리 — 리뷰어는 의견(결함 목록)만, 작성자가 수정, Cross Validator가 채점. 관계도·흐름도 추가 |
 
 ## License
 

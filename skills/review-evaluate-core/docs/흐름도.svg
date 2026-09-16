@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1500" viewBox="0 0 1820 1500" role="img" aria-labelledby="t d">
+  <title id="t">review-evaluate 작업 흐름도 (v0.7 · 2026-09-16 현행화)</title>
+  <desc id="d">대상 결정과 사양 대조, 라운드마다 검토·수정·채점을 반복해 100점에 이르고, 그 뒤에만 외부 자문을 받아 종료하는 흐름. 네 레인: 사용자, 메인 세션, 리뷰어·검증자, 외부 자문.</desc>
+  <style>
+    text{font-family:'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif}
+    .bg{fill:#fafaf7}
+    .lane{fill:#ffffff;stroke:#dce5de;stroke-width:2}
+    .laneHead{fill:#eaf2ed;stroke:#dce5de;stroke-width:2}
+    .step{fill:#ffffff;stroke:#5f6b7a;stroke-width:2}
+    .stepGreen{fill:#eaf2ed;stroke:#2d6a4f;stroke-width:3}
+    .stepGold{fill:#fff8e7;stroke:#c9a961;stroke-width:3}
+    .stepDark{fill:#0a1f14}
+    .title{font-size:38px;font-weight:700;fill:#0a1f14}
+    .sub{font-size:20px;fill:#5f6b7a}
+    .colHead{font-size:25px;font-weight:700;fill:#2d6a4f}
+    .num{font-size:22px;font-weight:700;fill:#2d6a4f}
+    .numLight{font-size:22px;font-weight:700;fill:#c9a961}
+    .head{font-size:21px;font-weight:700;fill:#0a1f14}
+    .headLight{font-size:21px;font-weight:700;fill:#fafaf7}
+    .body{font-size:19px;fill:#3a3a30}
+    .bodyLight{font-size:19px;fill:#fafaf7}
+    .band{font-size:22px;font-weight:700;fill:#2d6a4f}
+    .flow{stroke:#2d6a4f;stroke-width:3;fill:none;marker-end:url(#a)}
+    .flowGold{stroke:#c9a961;stroke-width:3;fill:none;marker-end:url(#ag)}
+    .flowGray{stroke:#5f6b7a;stroke-width:2;fill:none;stroke-dasharray:9 7;marker-end:url(#agr)}
+    .edgeLabel{font-size:19px;fill:#5f6b7a;paint-order:stroke;stroke:#fafaf7;stroke-width:11;stroke-linejoin:round}
+    .foot{font-size:19px;fill:#5f6b7a}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2d6a4f"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c9a961"/></marker>
+    <marker id="agr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6b7a"/></marker>
+  </defs>
+  <rect class="bg" width="1820" height="1500"/>
+  <text class="title" x="60" y="70">review-evaluate — 작업 흐름도</text>
+  <text class="sub" x="60" y="104">리뷰어가 결함을 찾고 → 작성자가 고치고 → 리뷰어가 반영을 확인하고 → 교차검증자가 채점한다. 100점이 된 뒤에만 외부 자문 1회</text>
+
+  <rect class="lane" x="60" y="140" width="330" height="1290" rx="10"/><rect class="laneHead" x="60" y="140" width="330" height="52" rx="10"/><text class="colHead" x="86" y="176">사용자</text>
+  <rect class="lane" x="420" y="140" width="400" height="1290" rx="10"/><rect class="laneHead" x="420" y="140" width="400" height="52" rx="10"/><text class="colHead" x="446" y="176">메인 세션 · 작성자</text>
+  <rect class="lane" x="850" y="140" width="470" height="1290" rx="10"/><rect class="laneHead" x="850" y="140" width="470" height="52" rx="10"/><text class="colHead" x="876" y="176">리뷰어 3종 · Cross Validator</text>
+  <rect class="lane" x="1350" y="140" width="410" height="1290" rx="10"/><rect class="laneHead" x="1350" y="140" width="410" height="52" rx="10"/><text class="colHead" x="1376" y="176">외부 자문 (codex · Gemini)</text>
+
+  <!-- A 준비 -->
+  <text class="band" x="60" y="228">A. 준비 — Phase 1 · 1.5</text>
+  <rect class="stepGreen" x="86" y="250" width="280" height="108" rx="8"/>
+  <text class="num" x="106" y="282">1</text><text class="head" x="136" y="282">/review-evaluate 호출</text>
+  <text class="body" x="106" y="312">파일·폴더 지정</text>
+  <text class="body" x="106" y="340">없으면 직전 작업 파일</text>
+
+  <rect class="stepGreen" x="446" y="250" width="350" height="108" rx="8"/>
+  <text class="num" x="466" y="282">2</text><text class="head" x="496" y="282">대상 결정 · 작성자 확정</text>
+  <text class="body" x="466" y="312">Code / Document / Report 분류</text>
+  <text class="body" x="466" y="340">누가 만들었나 → 수정 담당 지정</text>
+
+  <rect class="stepGreen" x="446" y="376" width="350" height="108" rx="8"/>
+  <text class="num" x="466" y="408">3</text><text class="head" x="496" y="408">연관 문서 탐색 · 사양 대조</text>
+  <text class="body" x="466" y="438">같은 폴더·상위·파일명·코드 참조</text>
+  <text class="body" x="466" y="466">GAP·EXTRA·MATCH 표 → 사양 충족률</text>
+
+  <path class="flow" d="M 366 290 L 444 290"/>
+  <path class="flow" d="M 621 358 L 621 374"/>
+
+  <!-- B 라운드 -->
+  <text class="band" x="60" y="540">B. 라운드 — 최소 3회 · 최대 10회 (Phase 2)</text>
+  <rect class="stepGold" x="876" y="562" width="420" height="108" rx="8"/>
+  <text class="numLight" x="896" y="594">4</text><text class="head" x="926" y="594">검토 (Review) — 리뷰어, 읽기 전용</text>
+  <text class="body" x="896" y="624">Critical · High · Medium · Low 로 분류</text>
+  <text class="body" x="896" y="652">파일:줄 근거 + 수정 제안 = 결함 목록</text>
+
+  <rect class="stepGreen" x="446" y="700" width="350" height="136" rx="8"/>
+  <text class="num" x="466" y="732">5</text><text class="head" x="496" y="732">수정 (Fix) — 작성자</text>
+  <text class="body" x="466" y="762">결함 목록을 받아 직접 고친다</text>
+  <text class="body" x="466" y="790">회신: 반영 / 거부+이유 / 보류</text>
+  <text class="body" x="466" y="818">명확한 버그는 /5times 위임</text>
+
+  <rect class="stepGold" x="876" y="840" width="420" height="108" rx="8"/>
+  <text class="numLight" x="896" y="872">6</text><text class="head" x="926" y="872">반영 확인 — 리뷰어</text>
+  <text class="body" x="896" y="902">고쳐졌나 대조 · 타당한 거부는 기각</text>
+  <text class="body" x="896" y="930">미반영·부당 거부는 다음 라운드 이월</text>
+
+  <rect class="stepGreen" x="876" y="1000" width="420" height="108" rx="8"/>
+  <text class="num" x="896" y="1032">7</text><text class="head" x="926" y="1032">평가 (Evaluate) — Cross Validator</text>
+  <text class="body" x="896" y="1062">검토·수정 미참여 제3자가 6기준 채점</text>
+  <text class="body" x="896" y="1090">반영 0건이면 점수 유지</text>
+
+  <rect class="step" x="446" y="1000" width="350" height="108" rx="8"/>
+  <text class="num" x="466" y="1032">8</text><text class="head" x="496" y="1032">라운드 판단</text>
+  <text class="body" x="466" y="1062">Round&lt;3 또는 CV&lt;100 → 계속</text>
+  <text class="body" x="466" y="1090">반영 0건 2회 / Round 10 → 종료</text>
+
+  <path class="flow" d="M 796 430 L 1086 430 L 1086 560"/>
+  <text class="edgeLabel" x="900" y="424">라운드 시작</text>
+  <path class="flow" d="M 900 670 L 900 684 L 720 684 L 720 698"/>
+  <text class="edgeLabel" x="912" y="708">결함 목록 → 작성자</text>
+  <path class="flow" d="M 796 768 L 1000 768 L 1000 838"/>
+  <text class="edgeLabel" x="1012" y="820">수정 회신 + 수정본</text>
+  <path class="flow" d="M 1086 948 L 1086 998"/>
+  <text class="edgeLabel" x="1100" y="980">확인 결과</text>
+  <path class="flow" d="M 876 1054 L 798 1054"/>
+  <text class="edgeLabel" x="816" y="1044">점수</text>
+  <path class="flowGray" d="M 621 1000 L 621 974 L 410 974 L 410 600 L 874 600"/>
+  <text class="edgeLabel" x="425" y="960">CV&lt;100 → 4로 복귀</text>
+
+  <!-- C 확정 -->
+  <text class="band" x="60" y="1180">C. 확정 — 100점 뒤 자문 (Phase 3)</text>
+  <rect class="stepGold" x="1376" y="1210" width="360" height="108" rx="8"/>
+  <text class="numLight" x="1396" y="1242">9</text><text class="head" x="1426" y="1242">codex · Gemini 각 1회</text>
+  <text class="body" x="1396" y="1272">UTF-8 3종 강제 · read-only</text>
+  <text class="body" x="1396" y="1300">C/H만 작성자가 반영, 나머지 참고</text>
+
+  <rect class="stepDark" x="86" y="1210" width="280" height="108" rx="8"/>
+  <text class="numLight" x="106" y="1242">10</text><text class="headLight" x="146" y="1242">최종 보고 · 추가 여부</text>
+  <text class="bodyLight" x="106" y="1272">점수·라운드·반영/거부 이력</text>
+  <text class="bodyLight" x="106" y="1300">[완료] / [1회 더]</text>
+
+  <path class="flowGold" d="M 1296 1030 L 1330 1030 L 1330 1264 L 1374 1264"/>
+  <text class="edgeLabel" x="1380" y="1196">CV = 100 → 1회만</text>
+  <path class="flowGray" d="M 1376 1290 L 1200 1290 L 1200 1110"/>
+  <text class="edgeLabel" x="1150" y="1345">C/H 발견 시 작성자 반영 → CV 재확인</text>
+  <path class="flow" d="M 621 1108 L 621 1264 L 368 1264"/>
+  <text class="edgeLabel" x="636" y="1200">종료 사유 확정</text>
+
+  <text class="foot" x="60" y="1470">2026-09-16 현행화 · v0.7 · 리뷰어=의견 · 작성자=수정 · Cross Validator=채점 · 100점 = CV(Claude) · 외부는 CV=100 뒤 각 1회, C/H만 반영 · 95~99 임의 종료 금지</text>
+</svg>
