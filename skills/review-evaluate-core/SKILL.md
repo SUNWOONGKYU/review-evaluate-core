@@ -362,13 +362,13 @@ Agent(
 
 **Cross Validator가 자체적으로 100점을 부여한 시점(단, Round ≥ 3 — 3회 미만이면 100점이어도 라운드를 채운 뒤)에 메인 세션이 codex와 Gemini를 *각각 1회* 추가 자문으로 호출한다(실행 주체 = 메인 세션. CV는 채점만 하고 Step 4를 직접 실행하지 않는다)(가능한 쪽 — CLI/API/웹 구독 폴백).** (95~99점에서는 호출하지 않고 다음 라운드로 계속 개선한다. 각 외부 LLM은 루프에서 1회로 제한 — 반복 호출 금지.) ⚠️ **이 자문은 사각 점검·개선 입력이지, 100점을 무르는 점수 게이트가 아니다(v0.6).** 외부가 잡은 Critical/High만 반영하고, 점수·Medium·Low·도메인 전문 판단(진보성·법률 등) 의견은 참고로 표기한다. — 상세: ABSOLUTE RULE의 "100점 = Cross Validator(Claude) 단계에서 달성한다" 항.
 
-같은 LLM 가족(Claude) 안에서는 자기 검증 편향이 발생한다. **서로 다른 두 LLM 가족(OpenAI codex/GPT + Google Gemini)** 으로 이중 교차 검증해 *진짜* 100점인지 확인한다. 한 외부 LLM만으로는 그 LLM 고유의 약점(예: 인코딩 오독·특정 패턴 맹점)이 통과를 왜곡할 수 있으므로 둘을 합집합으로 본다.
+같은 LLM 가족(Claude) 안에서는 자기 검증 편향이 발생한다. **서로 다른 두 LLM 가족(OpenAI codex/GPT + Google Gemini)** 으로 사각을 점검한다 — 차단성 Critical/High 탐지용 추가 자문이지, CV=100을 무르는 점수 게이트가 아니다(v0.6). 한 외부 LLM만으로는 그 LLM 고유의 약점(예: 인코딩 오독·특정 패턴 맹점)이 통과를 왜곡할 수 있으므로 둘을 합집합으로 본다.
 
 > 🚨 **인코딩 근본원인 (2026-06-12 실패 회고 — 반드시 지킴)**: codex/gemini에 **한글 프롬프트를 파이프(`|`)로 넘길 때 `[Console]::OutputEncoding`만 UTF-8로 바꾸면 부족하다. PowerShell이 네이티브 exe 파이프에 쓰는 인코딩은 `$OutputEncoding` 변수가 지배한다.** 이 줄을 빠뜨리면 한글이 cp949로 깨져(mojibake) 외부 LLM이 "파일이 깨졌다/구문오류"로 **거짓 0점**을 준다(한 자동화 파이프라인 검증 때 실제 발생 — py_compile 통과 코드를 codex가 "broken"으로 오판). **호출 전 `[Console]::OutputEncoding`·`[Console]::InputEncoding`·`$OutputEncoding` 셋 다 UTF-8 + `$PSStyle`/stdin 파일도 UTF-8(BOM 없음)** 으로 강제하라.
 
 #### Why — 사건 회고
 
-**2026-05-28 한 프로젝트 v0.3.0 검증 사건**: Cross Validator(Claude 서브에이전트)가 100점 부여한 산출물을 codex(GPT)가 검증한 결과 **88점 + High 2건 + Medium 3건 + Low 2건** 추가 발견. Cross Validator는 *같은 LLM 가족*이라 자기 자식 검증 편향 발생. 외부 LLM 교차 검증을 신설해 *진짜* 100점만 100점으로 인정한다.
+**2026-05-28 한 프로젝트 v0.3.0 검증 사건**: Cross Validator(Claude 서브에이전트)가 100점 부여한 산출물을 codex(GPT)가 검증한 결과 **88점 + High 2건 + Medium 3건 + Low 2건** 추가 발견. Cross Validator는 *같은 LLM 가족*이라 자기 자식 검증 편향 발생. 외부 LLM 교차 검증을 신설했다(당시 v0.2 규정 — v0.6에서 "추가 자문"으로 재정의, 위 참조).
 
 **2026-06-12 한 자동화 파이프라인 검증 사건 (v0.5 신설 동기)**: ① codex 호출에서 `$OutputEncoding` 누락 → 한글 mojibake → codex가 정상 코드를 "구문 깨짐 0점"으로 거짓 판정. ② 외부 검증을 codex 하나에만 의존 → 그 한 번이 인코딩으로 무력화되자 교차 검증 자체가 공백. → **(a) 인코딩 3종 강제, (b) codex+Gemini 이중화**로 단일 LLM 실패가 검증 공백으로 직결되지 않게 한다.
 
