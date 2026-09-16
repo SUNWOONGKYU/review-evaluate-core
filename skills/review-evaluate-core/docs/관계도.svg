@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1180" viewBox="0 0 1820 1180" role="img" aria-labelledby="t d">
-  <title id="t">review-evaluate 관계도 (v0.6 · 2026-09-16 현행화)</title>
+  <title id="t">review-evaluate 관계도 (v0.7 · 2026-09-16 현행화)</title>
   <desc id="d">사용자와 메인 세션, 타입별 리뷰어 3종과 교차검증자, 외부 추가 자문(codex·Gemini·웹 폴백)과 평가 대상 산출물의 관계. 누가 고치고 누가 채점하는지가 분리되어 있다.</desc>
   <style>
     .bg{fill:#fafaf7}
