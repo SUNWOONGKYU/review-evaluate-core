@@ -16,6 +16,7 @@
     .body{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#3a3a30}
     .bodyLight{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#fafaf7}
     .note{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
+    .foot{font:19px 'Malgun Gothic',Arial,sans-serif;fill:#5f6b7a}
     .flow{stroke:#2d6a4f;stroke-width:3;fill:none;marker-end:url(#a)}
     .flowGold{stroke:#c9a961;stroke-width:3;fill:none;marker-end:url(#ag)}
     .flowGray{stroke:#5f6b7a;stroke-width:2;fill:none;stroke-dasharray:9 7;marker-end:url(#agr)}
@@ -160,5 +161,5 @@
   <path class="flow" d="M 1318 850 L 1160 850 L 1160 620 L 1072 620"/>
   <text class="edgeLabel" x="1170" y="760">C/H만 반영</text>
 
-  <text class="note" x="60" y="1140">2026-09-16 현행화 · SKILL.md v0.7(2026-09-16) 기준 · 리뷰어 3(의견) + 작성자(수정) + 교차검증자 1(채점) + 외부 자문 2 · 루프 3~10회 · 100점 = CV(Claude)</text>
+  <text class="foot" x="60" y="1140">2026-09-16 현행화 · SKILL.md v0.7(2026-09-16) 기준 · 리뷰어 3(의견) + 작성자(수정) + 교차검증자 1(채점) + 외부 자문 2 · 루프 3~10회 · 100점 = CV(Claude)</text>
 </svg>
